@@ -1,4 +1,11 @@
 const crypto = require("crypto");
+const faunadb = require("faunadb");
+
+const query = faunadb.query;
+const client = new faunadb.Client({
+	secret: process.env.FAUNA_SECRET_KEY,
+	domain: "db.us.fauna.com",
+});
 
 exports.handler = async (event, context) => {
 	try {
@@ -29,13 +36,32 @@ exports.handler = async (event, context) => {
 			.toUpperCase();
 
 		if (md5sig === expectedMd5sig && statusCode === "2") {
-			return {
-				statusCode: 200,
-				body: JSON.stringify({
-					message: "Payment confirmation received successfully",
-					orderId: orderId,
-				}),
-			};
+			// Store successful order ID in FaunaDB
+			const faunadbResponse = await client.query(
+				query.Create(query.Collection("orders"), {
+					data: {
+						orderId: orderId,
+					},
+				})
+			);
+
+			// Check if the FaunaDB response is successful
+			if (faunadbResponse.ref) {
+				return {
+					statusCode: 200,
+					body: JSON.stringify({
+						message:
+							"Payment confirmation received successfully & recorded in Fauna DB.",
+						orderId: orderId,
+					}),
+				};
+			} else {
+				console.error("Failed to store order ID in FaunaDB");
+				return {
+					statusCode: 500,
+					body: JSON.stringify({ error: "Internal Server Error" }),
+				};
+			}
 		} else {
 			console.error(
 				"MD5 signature verification failed or status code is not 2"

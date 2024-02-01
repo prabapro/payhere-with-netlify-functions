@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "netlify-cli": "^17.15.6"
+  },
+  "dependencies": {
+    "faunadb": "^4.8.0"
   }
 }
