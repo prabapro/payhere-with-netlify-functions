@@ -1,4 +1,4 @@
-async function paymentGateway() {
+async function initiatePayment() {
 	const orderDetails = {
 		currency: "LKR",
 		amount: "1500.00",
@@ -28,8 +28,7 @@ async function paymentGateway() {
 			sandbox: true,
 			return_url: undefined, // Important
 			cancel_url: undefined, // Important
-			notify_url:
-				"https://payhere-demo-js-sdk.nfapps.prabapro.me/.netlify/functions/payhereNotify",
+			notify_url: "/.netlify/functions/payhereNotify",
 			currency: data.currency,
 			amount: data.amount,
 			order_id: data.orderId,
