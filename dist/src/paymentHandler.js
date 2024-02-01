@@ -24,11 +24,14 @@ async function initiatePayment() {
 		const data = await response.json();
 		console.info(data);
 
+		const notifyUrl =
+			window.location.origin + "/.netlify/functions/payhereNotify";
+
 		const payment = {
 			sandbox: true,
-			return_url: undefined, // Important
-			cancel_url: undefined, // Important
-			notify_url: "/.netlify/functions/payhereNotify",
+			return_url: undefined,
+			cancel_url: undefined,
+			notify_url: notifyUrl,
 			currency: data.currency,
 			amount: data.amount,
 			order_id: data.orderId,
@@ -49,9 +52,33 @@ async function initiatePayment() {
 
 		payhere.startPayment(payment);
 
-		payhere.onCompleted = function onCompleted(orderId) {
-			console.log("Payment completed. OrderID:" + orderId);
-			// Note: validate the payment and show success or failure page to the customer
+		payhere.onCompleted = async function onCompleted(orderId) {
+			try {
+				// Check if the order ID exists in FaunaDB
+				const faunaResponse = await fetch(
+					`/.netlify/functions/checkOrder?orderId=${orderId}`
+				);
+
+				if (faunaResponse.ok) {
+					const faunaData = await faunaResponse.json();
+
+					if (faunaData.exists) {
+						console.log("Payment completed. OrderID:" + orderId);
+						// Note: validate the payment and show success or failure page to the customer
+					} else {
+						console.error("Order ID not found in FaunaDB");
+						// Handle the case where the order ID does not exist in FaunaDB
+					}
+				} else {
+					console.error(
+						`Failed to check order ID in FaunaDB. Status: ${faunaResponse.status}`
+					);
+					// Handle the case where the FaunaDB check failed
+				}
+			} catch (error) {
+				console.error("Error:", error);
+				// Handle any other errors
+			}
 		};
 
 		// Payment window closed
