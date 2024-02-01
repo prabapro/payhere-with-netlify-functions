@@ -29,7 +29,7 @@ async function paymentGateway() {
 			return_url: undefined, // Important
 			cancel_url: undefined, // Important
 			notify_url:
-				"https://f62e-2402-d000-8118-2be1-7c04-c211-dcd2-9bd3.ngrok-free.app/.netlify/functions/payhereNotify",
+				"https://payhere-demo-js-sdk.nfapps.prabapro.me/.netlify/functions/payhereNotify",
 			currency: data.currency,
 			amount: data.amount,
 			order_id: data.orderId,
