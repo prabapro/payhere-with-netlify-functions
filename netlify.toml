@@ -1,0 +1,8 @@
+[build]
+  functions = "functions"  # Specifies the directory where Netlify will look for serverless functions
+  publish = "dist"  # Specifies the directory to be published
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
