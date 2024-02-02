@@ -12,12 +12,14 @@
 				"splitTerminals": [
 					{
 						"name": "Netlify Dev",
-						"commands": ["netlify dev"],
+						"commands": ["BROWSER=none netlify dev"],
 						"shouldRunCommands": true
 					},
 					{
 						"name": "Ngrok",
-						"commands": ["ngrok http 8888"],
+						"commands": [
+							"open 'http://127.0.0.1:4040' && ngrok http 8888 --domain=innocent-weevil-terribly.ngrok-free.app"
+						],
 						"shouldRunCommands": true
 					}
 				]
