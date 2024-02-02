@@ -2,7 +2,7 @@ async function initiatePayment() {
 	const orderDetails = {
 		currency: "LKR",
 		amount: "1500.00",
-		orderId: Math.floor(Math.random() * 900000) + 100000,
+		orderId: generateOrderId(),
 	};
 
 	const orderParams = Object.keys(orderDetails)
@@ -95,4 +95,18 @@ async function initiatePayment() {
 	} catch (error) {
 		console.error("Error:", error.message);
 	}
+}
+
+function generateOrderId() {
+	const pad = (value) => String(value).padStart(2, "0");
+	const now = new Date();
+
+	const timestamp = `${now.getUTCFullYear()}${pad(now.getUTCDate())}${pad(
+		now.getUTCMonth() + 1
+	)}${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(
+		now.getUTCSeconds()
+	)}`;
+
+	const randomNum = Math.floor(Math.random() * 900000) + 100000;
+	return `${timestamp}${randomNum}`;
 }
