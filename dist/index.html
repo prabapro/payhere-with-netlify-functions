@@ -3,50 +3,98 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Payhere Demo</title>
+		<title>PayHere + Netlify Functions</title>
+		<link rel="stylesheet" href="src/bootstrap.min.css" />
 		<link rel="stylesheet" href="src/style.css" />
 	</head>
-	<body>
-		<form id="paymentForm">
-			<div>
-				<label for="firstName">First Name:</label>
-				<input
-					type="text"
-					id="firstName"
-					name="firstName"
-					value="Joe"
-					required />
-			</div>
+	<body class="text-center">
+		<main class="form-signin">
+			<form>
+				<img class="mb-4" src="src/payhere-logo.png" alt="Payhere Logo" />
+				<h5 class="mb-4">
+					A Jamstack demo app using payhere.lk payment gateway with Netlify
+					Functions & Fauna DB
+				</h5>
 
-			<div>
-				<label for="lastName">Last Name:</label>
-				<input type="text" id="lastName" name="lastName" value="Doe" required />
-			</div>
+				<div class="form-floating mb-2">
+					<input
+						type="text"
+						class="form-control"
+						id="firstName"
+						placeholder="First Name"
+						value="John"
+						required />
+					<label for="firstName">First Name</label>
+				</div>
 
-			<div>
-				<label for="amount">Amount:</label>
-				<input
-					type="text"
-					id="amount"
-					name="amount"
-					placeholder="Enter amount"
-					value="99.99"
-					required />
+				<div class="form-floating mb-2">
+					<input
+						type="text"
+						class="form-control"
+						id="lastName"
+						placeholder="Last Name"
+						value="Doe"
+						required />
+					<label for="lastName">Last Name</label>
+				</div>
 
-				<label for="currency" style="display: none">Currency:</label>
-				<select id="currency" name="currency">
-					<option value="LKR">LKR</option>
-					<option value="USD" selected>USD</option>
-					<option value="EUR">EUR</option>
-					<option value="GBP">GBP</option>
-					<option value="AUD">AUD</option>
-				</select>
-			</div>
+				<div class="form-floating mb-2">
+					<select
+						class="form-select"
+						id="currency"
+						aria-label="Floating label select example">
+						<option value="USD" selected>USD</option>
+						<option value="LKR">LKR</option>
+						<option value="EUR">EUR</option>
+						<option value="GBP">GBP</option>
+						<option value="AUD">AUD</option>
+					</select>
+					<label for="currency">Currency</label>
+				</div>
 
-			<div>
-				<button type="button" onclick="initiatePayment()">Pay</button>
+				<div class="form-floating mb-4">
+					<input
+						type="text"
+						class="form-control"
+						id="amount"
+						placeholder="Amount"
+						value="99.99"
+						required />
+					<label for="amount">Amount</label>
+				</div>
+
+				<button
+					class="w-100 btn btn-lg btn-primary"
+					type="button"
+					onclick="initiatePayment()"
+					style="cursor: pointer !important">
+					Simulate Bogus Payment
+				</button>
+			</form>
+
+			<div class="mt-5 mb-3 text-muted">
+				⚠️
+				<strong>Note:</strong>
+				<p>
+					Please note that this is solely a demonstration app using
+					<a href="https://sandbox.payhere.lk/" target="_blank">
+						PayHere Sandbox
+					</a>
+					and does not facilitate any actual payment transactions.
+				</p>
+
+				<p>
+					I want to clarify that I am not associated with or employed by PayHere
+					in any capacity for the development of this app.
+				</p>
+
+				<a
+					href="https://github.com/prabapro/payhere-with-netlify-functions"
+					target="_blank">
+					<img src="src/github-mark.png" alt="GitHub logo" width="25px" />
+				</a>
 			</div>
-		</form>
+		</main>
 
 		<script>
 			document
