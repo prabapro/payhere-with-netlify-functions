@@ -5,6 +5,8 @@ async function initiatePayment() {
 	let firstNameField = document.getElementById("firstName").value;
 	let lastNameField = document.getElementById("lastName").value;
 
+	//TODO: handle rest of the input values as required for { payment }...
+
 	// Ensure amountField has two decimal places
 	amountField = parseFloat(amountField).toFixed(2);
 
@@ -41,8 +43,8 @@ async function initiatePayment() {
 
 		const payment = {
 			sandbox: true,
-			return_url: undefined,
-			cancel_url: undefined,
+			return_url: window.location.origin,
+			cancel_url: window.location.origin,
 			notify_url: notifyUrl,
 			currency: data.currency,
 			amount: data.amount,
@@ -62,6 +64,8 @@ async function initiatePayment() {
 			delivery_country: "Sri Lanka",
 		};
 
+		//TODO: replace the hardcoded values...
+
 		payhere.startPayment(payment);
 
 		payhere.onCompleted = async function onCompleted(orderId) {
@@ -76,32 +80,36 @@ async function initiatePayment() {
 
 					if (faunaData.exists) {
 						console.log("Payment completed. OrderID:" + orderId);
-						// Note: validate the payment and show success or failure page to the customer
+
+						//TODO: validate the payment and show success or failure page to the customer
 					} else {
 						console.error("Order ID not found in FaunaDB");
-						// Handle the case where the order ID does not exist in FaunaDB
+
+						//TODO: Handle the case where the order ID does not exist in FaunaDB
 					}
 				} else {
 					console.error(
 						`Failed to check order ID in FaunaDB. Status: ${faunaResponse.status}`
 					);
-					// Handle the case where the FaunaDB check failed
+
+					//TODO: Handle the case where the FaunaDB check failed
 				}
 			} catch (error) {
 				console.error("Error:", error);
-				// Handle any other errors
+
+				//TODO: Handle any other errors
 			}
 		};
 
 		// Payment window closed
 		payhere.onDismissed = function onDismissed() {
-			// Note: Prompt user to pay again or show an error page
+			//TODO: Prompt user to pay again or show an error page
 			console.log("Payment dismissed");
 		};
 
 		// Error occurred
 		payhere.onError = function onError(error) {
-			// Note: show an error page
+			//TODO: Prompt user to pay again or show an error page
 			console.log("Error:" + error);
 		};
 	} catch (error) {
