@@ -19,6 +19,9 @@ exports.handler = async (event, context) => {
 		const payhereCurrency = formData.get("payhere_currency");
 		const statusCode = formData.get("status_code");
 		const md5sig = formData.get("md5sig");
+		const paymentMethod = formData.get("method") ?? "";
+		const paymentId = formData.get("payment_id") ?? "";
+		const statusMessage = formData.get("status_message") ?? "";
 
 		// Verify the integrity of the data using the MD5 signature
 		const secretKey = process.env.PAYHERE_SECRET;
@@ -42,6 +45,11 @@ exports.handler = async (event, context) => {
 				query.Create(query.Collection("payhere-deme-orders"), {
 					data: {
 						orderId: orderId,
+						amount: payhereAmount,
+						currency: payhereCurrency,
+						paymentMethod: paymentMethod,
+						paymentId: paymentId,
+						statusMessage: statusMessage,
 					},
 				})
 			);

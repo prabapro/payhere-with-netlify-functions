@@ -13,12 +13,13 @@ exports.handler = async (event, context) => {
 
 		// Check if the order ID exists in FaunaDB
 		const faunaResponse = await client.query(
-			query.Exists(query.Match(query.Index("orders_by_orderId"), orderId))
+			// query.Exists(query.Match(query.Index("orders_by_orderId"), orderId))
+			query.Get(query.Match(query.Index("orders_by_orderId"), orderId))
 		);
 
 		return {
 			statusCode: 200,
-			body: JSON.stringify({ exists: faunaResponse }),
+			body: JSON.stringify(faunaResponse),
 		};
 	} catch (error) {
 		console.error("Error:", error);

@@ -78,8 +78,15 @@ async function initiatePayment() {
 				if (faunaResponse.ok) {
 					const faunaData = await faunaResponse.json();
 
-					if (faunaData.exists) {
-						console.log("Payment completed. OrderID:" + orderId);
+					if (faunaData) {
+						console.log(
+							`Payment completed. OrderID: ${orderId}. Data retrieved from Fauna DB: ${JSON.stringify(
+								faunaData.data
+							)}`
+						);
+
+						// Redirecting customer to the success page
+						window.location.href = "/success";
 
 						//TODO: validate the payment and show success or failure page to the customer
 					} else {
