@@ -1,3 +1,4 @@
+require("dotenv").config();
 const crypto = require("crypto");
 const faunadb = require("faunadb");
 
@@ -38,7 +39,7 @@ exports.handler = async (event, context) => {
 		if (md5sig === expectedMd5sig && statusCode === "2") {
 			// Store successful order ID in FaunaDB
 			const faunadbResponse = await client.query(
-				query.Create(query.Collection("orders"), {
+				query.Create(query.Collection("payhere-deme-orders"), {
 					data: {
 						orderId: orderId,
 					},
