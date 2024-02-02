@@ -5,6 +5,24 @@
 		}
 	],
 	"settings": {
+		"restoreTerminals.keepExistingTerminalsOpen": false,
+		"restoreTerminals.runOnStartup": true,
+		"restoreTerminals.terminals": [
+			{
+				"splitTerminals": [
+					{
+						"name": "Netlify Dev",
+						"commands": ["netlify dev"],
+						"shouldRunCommands": true
+					},
+					{
+						"name": "Ngrok",
+						"commands": ["ngrok http 8888"],
+						"shouldRunCommands": true
+					}
+				]
+			}
+		],
 		"cSpell.words": ["faunadb"]
 	}
 }

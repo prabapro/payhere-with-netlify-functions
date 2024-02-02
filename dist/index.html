@@ -4,11 +4,63 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Payhere Demo</title>
+		<link rel="stylesheet" href="src/style.css" />
 	</head>
 	<body>
-		<div>
-			<button onclick="initiatePayment()">Pay here</button>
-		</div>
+		<form id="paymentForm">
+			<div>
+				<label for="firstName">First Name:</label>
+				<input
+					type="text"
+					id="firstName"
+					name="firstName"
+					value="Joe"
+					required />
+			</div>
+
+			<div>
+				<label for="lastName">Last Name:</label>
+				<input type="text" id="lastName" name="lastName" value="Doe" required />
+			</div>
+
+			<div>
+				<label for="amount">Amount:</label>
+				<input
+					type="text"
+					id="amount"
+					name="amount"
+					placeholder="Enter amount"
+					value="99.99"
+					required />
+
+				<label for="currency" style="display: none">Currency:</label>
+				<select id="currency" name="currency">
+					<option value="LKR">LKR</option>
+					<option value="USD" selected>USD</option>
+					<option value="EUR">EUR</option>
+					<option value="GBP">GBP</option>
+					<option value="AUD">AUD</option>
+				</select>
+			</div>
+
+			<div>
+				<button type="button" onclick="initiatePayment()">Pay</button>
+			</div>
+		</form>
+
+		<script>
+			document
+				.getElementById("amount")
+				.addEventListener("input", function (event) {
+					let inputValue = event.target.value;
+					inputValue = inputValue.replace(/[^\d.]/g, ""); // Remove non-numeric and non-decimal characters
+					const decimalCount = (inputValue.split(".")[1] || []).length;
+					if (decimalCount > 2) {
+						inputValue = inputValue.slice(0, -1); // Allow only two decimal places
+					}
+					event.target.value = inputValue;
+				});
+		</script>
 		<script src="src/paymentHandler.js"></script>
 		<script
 			type="text/javascript"

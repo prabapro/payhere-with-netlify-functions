@@ -1,7 +1,19 @@
 async function initiatePayment() {
+	// Form fields
+	let currencyField = document.getElementById("currency").value;
+	let amountField = document.getElementById("amount").value;
+	let firstNameField = document.getElementById("firstName").value;
+	let lastNameField = document.getElementById("lastName").value;
+
+	// Ensure amountField has two decimal places
+	amountField = parseFloat(amountField).toFixed(2);
+
+	// Convert the formatted amount to string
+	const formattedAmountString = amountField.toString();
+
 	const orderDetails = {
-		currency: "LKR",
-		amount: "1500.00",
+		currency: currencyField,
+		amount: formattedAmountString,
 		orderId: generateOrderId(),
 	};
 
@@ -38,8 +50,8 @@ async function initiatePayment() {
 			merchant_id: data.merchantId,
 			hash: data.hash,
 			items: "MacBook Pro",
-			first_name: "John",
-			last_name: "Doe",
+			first_name: firstNameField,
+			last_name: lastNameField,
 			email: "john@doe.com",
 			phone: "0777111222",
 			address: "123, Main Street",
