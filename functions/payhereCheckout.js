@@ -20,8 +20,8 @@ const crypto = require("crypto");
 exports.handler = async (event, context) => {
 	try {
 		// Extract parameters from the query parameters
-		const currency = event.queryStringParameters.currency;
 		const amount = event.queryStringParameters.amount;
+		const currency = event.queryStringParameters.currency;
 		const orderId = event.queryStringParameters.orderId;
 
 		// Retrieve merchant ID and secret from environment variables
@@ -49,11 +49,11 @@ exports.handler = async (event, context) => {
 		return {
 			statusCode: 200,
 			body: JSON.stringify({
-				currency: currency,
 				amount: amount,
-				orderId: orderId,
-				merchantId: merchantId,
+				currency: currency,
 				hash: hash,
+				merchantId: merchantId,
+				orderId: orderId,
 			}),
 		};
 	} catch (error) {

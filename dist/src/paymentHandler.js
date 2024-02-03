@@ -69,38 +69,43 @@ async function initiatePayment() {
 		 * @type {Object}
 		 */
 		const payment = {
+			//* System Params
 			sandbox: true,
+			notify_url: notifyUrl,
 			return_url: window.location.origin,
 			cancel_url: window.location.origin,
-			notify_url: notifyUrl,
-			currency: data.currency,
+
+			//* Payment Params
 			amount: data.amount,
-			order_id: data.orderId,
-			merchant_id: data.merchantId,
-			hash: data.hash,
-			items: "MacBook Pro",
+			currency: data.currency,
 			first_name: firstNameField,
+			hash: data.hash,
 			last_name: lastNameField,
-			email: "john@doe.com",
-			phone: "0777111222",
+			merchant_id: data.merchantId,
+			order_id: data.orderId,
+
+			//TODO: Make the hardcoded values dynamic...
 			address: "123, Main Street",
 			city: "Colombo",
 			country: "Sri Lanka",
 			delivery_address: "123, Main Steet",
 			delivery_city: "Colombo",
 			delivery_country: "Sri Lanka",
+			email: "john@doe.com",
+			items: "MacBook Pro",
+			phone: "0777111222",
 		};
-
-		//TODO: replace the hardcoded values...
 
 		// Store the payment object in session storage excluding a couple of keys
 		const excludedProperties = [
-			"sandbox",
-			"notify_url",
+			"amount",
 			"cancel_url",
-			"return_url",
-			"merchant_id",
+			"currency",
 			"hash",
+			"merchant_id",
+			"notify_url",
+			"return_url",
+			"sandbox",
 		];
 
 		storeFilteredPaymentInSessionStorage(payment, excludedProperties);

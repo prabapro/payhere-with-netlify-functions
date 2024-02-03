@@ -42,11 +42,13 @@ exports.handler = async (event, context) => {
 			body: JSON.stringify(faunaResponse),
 		};
 	} catch (error) {
-		// Handle errors and return an internal server error response
-		console.error("Error:", error);
 		return {
 			statusCode: 500,
-			body: JSON.stringify({ error: "Internal Server Error" }),
+			body: JSON.stringify({
+				error: error.message || "Internal Server Error",
+				file: "checkOrder.js",
+				line: 48,
+			}),
 		};
 	}
 };

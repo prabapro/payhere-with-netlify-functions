@@ -35,16 +35,18 @@ exports.handler = async (event, context) => {
 		const formData = new URLSearchParams(event.body);
 
 		// Extract data from Payhere notification
+		const md5sig = formData.get("md5sig");
 		const merchantId = formData.get("merchant_id");
 		const orderId = formData.get("order_id");
 		const payhereAmount = formData.get("payhere_amount");
 		const payhereCurrency = formData.get("payhere_currency");
-		const statusCode = formData.get("status_code");
-		const md5sig = formData.get("md5sig");
-		const paymentMethod = formData.get("method") ?? "";
-		const paymentId = formData.get("payment_id") ?? "";
-		const statusMessage = formData.get("status_message") ?? "";
 		const paymentCardNo = formData.get("card_no") ?? "";
+		const paymentId = formData.get("payment_id") ?? "";
+		const paymentMethod = formData.get("method") ?? "";
+		const statusCode = formData.get("status_code");
+		const statusMessage = formData.get("status_message") ?? "";
+
+		// Extract last 4 digits of the card number
 		const paymentCardLast4Digits = paymentCardNo.slice(-4);
 
 		// Verify the integrity of the data using the MD5 signature
@@ -71,13 +73,15 @@ exports.handler = async (event, context) => {
 						orderId: orderId,
 						amount: payhereAmount,
 						currency: payhereCurrency,
-						paymentMethod: paymentMethod,
-						paymentId: paymentId,
-						statusMessage: statusMessage,
 						paymentCardLast4Digits: paymentCardLast4Digits,
+						paymentId: paymentId,
+						paymentMethod: paymentMethod,
+						statusMessage: statusMessage,
 					},
 				})
 			);
+
+			console.log("Sent to Fauna DB");
 
 			// Check if the FaunaDB response is successful
 			if (faunadbResponse.ref) {
@@ -93,26 +97,29 @@ exports.handler = async (event, context) => {
 				console.error("Failed to store order ID in FaunaDB");
 				return {
 					statusCode: 500,
-					body: JSON.stringify({ error: "Internal Server Error" }),
+					body: JSON.stringify({
+						error: "Internal Server Error at line 99 on payhereNotify.js",
+					}),
 				};
 			}
 		} else {
-			console.error(
-				"MD5 signature verification failed or status code is not 2"
-			);
-			console.log("Received data:", formData.toString()); // Log received data
-
 			return {
 				statusCode: 400,
-				body: JSON.stringify({ error: "Invalid request" }),
+				body: JSON.stringify({
+					error: "Invalid request",
+					file: "payhereNotify.js",
+					line: 112,
+				}),
 			};
 		}
 	} catch (error) {
-		// Handle errors and return an internal server error response
-		console.error("Error:", error);
 		return {
 			statusCode: 500,
-			body: JSON.stringify({ error: "Internal Server Error" }),
+			body: JSON.stringify({
+				error: error.message || "An unknown error occurred",
+				file: "payhereNotify.js",
+				line: 126,
+			}),
 		};
 	}
 };
