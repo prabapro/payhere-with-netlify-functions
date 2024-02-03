@@ -4,12 +4,16 @@
  */
 async function initiatePayment() {
 	// Form fields
-	let currencyField = document.getElementById("currency").value;
+	let addressField = document.getElementById("address").value;
 	let amountField = document.getElementById("amount").value;
+	let cityField = document.getElementById("city").value;
+	let countryField = document.getElementById("country").value;
+	let emailField = document.getElementById("email").value;
 	let firstNameField = document.getElementById("firstName").value;
+	let itemField = document.getElementById("item").value;
 	let lastNameField = document.getElementById("lastName").value;
-
-	//TODO: handle rest of the input values as required for { payment }...
+	let phoneField = document.getElementById("phone").value;
+	let currencyField = document.getElementById("currency").value;
 
 	// Ensure amountField has two decimal places
 	amountField = parseFloat(amountField).toFixed(2);
@@ -17,8 +21,11 @@ async function initiatePayment() {
 	// Convert the formatted amount to string
 	const formattedAmountString = amountField.toString();
 
+	// Generate Order ID
+	const orderId = generateOrderId();
+
 	/**
-	 * Object containing order details.
+	 * Object containing the parameters required for generating the hash.
 	 * @type {Object}
 	 * @property {string} currency - The currency of the order.
 	 * @property {string} amount - The formatted amount of the order.
@@ -27,11 +34,11 @@ async function initiatePayment() {
 	const orderDetails = {
 		currency: currencyField,
 		amount: formattedAmountString,
-		orderId: generateOrderId(),
+		orderId: orderId,
 	};
 
 	/**
-	 * Parameters for the order, encoded for the URL.
+	 * Parameters for the hash, send to payHereCheckout.js as query strings.
 	 * @type {string}
 	 */
 	const orderParams = Object.keys(orderDetails)
@@ -55,7 +62,7 @@ async function initiatePayment() {
 		}
 
 		/**
-		 * JSON data received from the Payhere checkout response.
+		 * JSON data received from the PayhereCheckout netlify function.
 		 * @type {Object}
 		 */
 		const data = await response.json();
@@ -70,30 +77,30 @@ async function initiatePayment() {
 		 */
 		const payment = {
 			//* System Params
-			sandbox: true,
+			cancel_url: window.location.origin,
 			notify_url: notifyUrl,
 			return_url: window.location.origin,
-			cancel_url: window.location.origin,
+			sandbox: true,
 
-			//* Payment Params
-			amount: data.amount,
-			currency: data.currency,
-			first_name: firstNameField,
+			//* Payment Params Received from payhereCheckout Netlify Function
 			hash: data.hash,
-			last_name: lastNameField,
 			merchant_id: data.merchantId,
-			order_id: data.orderId,
 
-			//TODO: Make the hardcoded values dynamic...
-			address: "123, Main Street",
-			city: "Colombo",
-			country: "Sri Lanka",
-			delivery_address: "123, Main Steet",
-			delivery_city: "Colombo",
-			delivery_country: "Sri Lanka",
-			email: "john@doe.com",
-			items: "MacBook Pro",
-			phone: "0777111222",
+			//* Other Parameters
+			address: addressField,
+			amount: formattedAmountString,
+			city: cityField,
+			country: countryField,
+			currency: currencyField,
+			delivery_address: addressField,
+			delivery_city: cityField,
+			delivery_country: countryField,
+			email: emailField,
+			first_name: firstNameField,
+			items: itemField,
+			last_name: lastNameField,
+			order_id: orderId,
+			phone: phoneField,
 		};
 
 		// Store the payment object in session storage excluding a couple of keys
