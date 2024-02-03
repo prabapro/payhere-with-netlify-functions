@@ -15,19 +15,74 @@
 				Functions & Fauna DB
 			</h5>
 
+			<div class="container mt-5">
+				<div class="row">
+					<div class="col">
+						<img src="src/check.png" alt="success icon" width="72px" />
+						<h4 class="pt-4">
+							Thank you,
+							<span id="customerFirstName">Jane</span>
+							.
+						</h4>
+
+						<p class="pt-2">
+							Order #
+							<span
+								id="orderNumber"
+								class="badge rounded-pill font-monospace bg-light text-dark fs-6">
+								12345678901234567890
+							</span>
+						</p>
+					</div>
+				</div>
+
+				<div class="card mt-4 text-start">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">
+							<p class="text-muted pt-2 fw-lighter">Customer Information</p>
+							<p>
+								<span id="customerName"><strong>Jane Doe</strong></span>
+							</p>
+							<p>
+								<span id="customerAddress">
+									123, Main Street, Colombo, Sri Lanka
+								</span>
+							</p>
+						</li>
+						<li class="list-group-item">
+							<p class="text-muted pt-2 fw-lighter">Order Information</p>
+							<p><span id="orderItem">MacBook Pro</span></p>
+							<p><span id="orderAmount">LKR 1500.00</span></p>
+						</li>
+						<li class="list-group-item">
+							<p class="text-muted pt-2 fw-lighter">Payment Information</p>
+							<p>
+								<span id="paymentMethod">Visa</span>
+								<span id="paymentCard">************4564</span>
+							</p>
+						</li>
+					</ul>
+				</div>
+
+				<p class="pt-4">
+					We'll email the receipt to
+					<span id="customerEmail">test@test.com</span>
+					shortly.
+				</p>
+			</div>
+
 			<a
 				href="/"
-				class="w-100 btn btn-lg btn-primary"
+				class="w-100 btn btn-lg btn-primary mt-4"
 				type="button"
 				style="cursor: pointer !important">
 				Back to Home Page
 			</a>
 
 			<div class="mt-5 mb-3 text-muted">
-				⚠️
-				<strong>Note:</strong>
 				<p>
-					Please note that this is solely a demonstration app using
+					<strong>⚠️</strong>
+					This is solely a demonstration app using
 					<a href="https://sandbox.payhere.lk/" target="_blank">
 						PayHere Sandbox
 					</a>
@@ -35,14 +90,19 @@
 				</p>
 
 				<p>
-					I want to clarify that I am not associated with or employed by PayHere
-					in any capacity for the development of this app.
+					<strong>Disclaimer:</strong>
+					I am not associated with or employed by PayHere in any capacity for
+					the development of this app.
 				</p>
 
 				<a
 					href="https://github.com/prabapro/payhere-with-netlify-functions"
 					target="_blank">
-					<img src="src/github-mark.png" alt="GitHub logo" width="25px" />
+					<img
+						src="src/github-mark.png"
+						alt="GitHub logo"
+						width="25px"
+						class="mt-4" />
 				</a>
 			</div>
 		</main>
