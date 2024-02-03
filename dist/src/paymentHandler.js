@@ -5,6 +5,8 @@ async function initiatePayment() {
 	let firstNameField = document.getElementById("firstName").value;
 	let lastNameField = document.getElementById("lastName").value;
 
+	//TODO: handle rest of the input values as required for { payment }...
+
 	// Ensure amountField has two decimal places
 	amountField = parseFloat(amountField).toFixed(2);
 
@@ -41,8 +43,8 @@ async function initiatePayment() {
 
 		const payment = {
 			sandbox: true,
-			return_url: undefined,
-			cancel_url: undefined,
+			return_url: window.location.origin,
+			cancel_url: window.location.origin,
 			notify_url: notifyUrl,
 			currency: data.currency,
 			amount: data.amount,
@@ -62,8 +64,24 @@ async function initiatePayment() {
 			delivery_country: "Sri Lanka",
 		};
 
+		//TODO: replace the hardcoded values...
+
+		// Store the payment object in session storage excluding a couple of keys
+		const excludedProperties = [
+			"sandbox",
+			"notify_url",
+			"cancel_url",
+			"return_url",
+			"merchant_id",
+			"hash",
+		];
+
+		storeFilteredPaymentInSessionStorage(payment, excludedProperties);
+
+		// Start Payhere Payment
 		payhere.startPayment(payment);
 
+		// Payhere completed processing payment
 		payhere.onCompleted = async function onCompleted(orderId) {
 			try {
 				// Check if the order ID exists in FaunaDB
@@ -74,34 +92,40 @@ async function initiatePayment() {
 				if (faunaResponse.ok) {
 					const faunaData = await faunaResponse.json();
 
-					if (faunaData.exists) {
-						console.log("Payment completed. OrderID:" + orderId);
-						// Note: validate the payment and show success or failure page to the customer
+					// Validate the payment and show success or failure page to the customer
+					if (faunaData) {
+						// Retrieving data from Fauna
+						const transactionData = JSON.stringify(faunaData.data);
+
+						// Store the JSON string in session storage
+						sessionStorage.setItem("transactionData", transactionData);
+
+						// Redirecting customer to the success page
+						window.location.href = "/success";
 					} else {
-						console.error("Order ID not found in FaunaDB");
-						// Handle the case where the order ID does not exist in FaunaDB
+						console.error("Order ID not found in the database.");
 					}
 				} else {
 					console.error(
-						`Failed to check order ID in FaunaDB. Status: ${faunaResponse.status}`
+						`Status: ${faunaResponse.status} - Failed to retrieve from the database.`
 					);
-					// Handle the case where the FaunaDB check failed
 				}
 			} catch (error) {
 				console.error("Error:", error);
-				// Handle any other errors
+
+				//TODO: Handle any other errors
 			}
 		};
 
 		// Payment window closed
 		payhere.onDismissed = function onDismissed() {
-			// Note: Prompt user to pay again or show an error page
+			//TODO: Prompt user to pay again or show an error page
 			console.log("Payment dismissed");
 		};
 
 		// Error occurred
 		payhere.onError = function onError(error) {
-			// Note: show an error page
+			//TODO: Prompt user to pay again or show an error page
 			console.log("Error:" + error);
 		};
 	} catch (error) {
@@ -109,16 +133,36 @@ async function initiatePayment() {
 	}
 }
 
+// Generate 20 character Order ID (including 2 hyphens) using the current UTC timestamp + 6 random digits
 function generateOrderId() {
 	const pad = (value) => String(value).padStart(2, "0");
 	const now = new Date();
 
-	const timestamp = `${now.getUTCFullYear()}${pad(now.getUTCDate())}${pad(
-		now.getUTCMonth() + 1
-	)}${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(
+	const datePart = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(
+		now.getUTCDate()
+	)}`;
+	const timePart = `${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(
 		now.getUTCSeconds()
 	)}`;
 
-	const randomNum = Math.floor(Math.random() * 900000) + 100000;
-	return `${timestamp}${randomNum}`;
+	const randomNum = Math.floor(Math.random() * 9000) + 1000;
+
+	const orderId = `${datePart}-${timePart}-${randomNum}`;
+	return orderId;
+}
+
+// Store customer data in session storage excluding certain keys
+function storeFilteredPaymentInSessionStorage(inputObject, excludedProperties) {
+	// Create a new object by excluding specified properties
+	const filteredObject = Object.fromEntries(
+		Object.entries(inputObject).filter(
+			([key]) => !excludedProperties.includes(key)
+		)
+	);
+
+	// Convert the filtered object to a JSON string
+	const filteredObjectString = JSON.stringify(filteredObject);
+
+	// Store the JSON string in session storage
+	sessionStorage.setItem("customerOrderData", filteredObjectString);
 }
