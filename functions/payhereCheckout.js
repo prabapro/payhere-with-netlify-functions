@@ -1,6 +1,6 @@
 /**
- * Netlify Function: Payhere Checkout.
- * Generates and returns Payhere payment details including hash.
+ * Netlify Function: payhereCheckout
+ * Generates hash
  * @module payhereCheckout
  */
 

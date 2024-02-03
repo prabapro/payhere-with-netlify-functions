@@ -1,5 +1,5 @@
 /**
- * Netlify Function: Payhere Notify.
+ * Netlify Function: payhereNotify
  * Handles Payhere payment notifications and records successful orders in FaunaDB.
  * @module payhereNotify
  */

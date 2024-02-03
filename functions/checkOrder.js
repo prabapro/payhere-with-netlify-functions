@@ -1,6 +1,6 @@
 /**
- * Netlify Function: Check Order by Order ID.
- * Checks if the given Order ID exists in FaunaDB.
+ * Netlify Function: checkOrder
+ * Checks if the given Order ID exists in FaunaDB & send the response to front end.
  * @module checkOrder
  */
 
