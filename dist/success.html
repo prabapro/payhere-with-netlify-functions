@@ -159,17 +159,12 @@
 	// Customer Full Name
 	document.querySelector(
 		".customer-name"
-	).innerHTML = `${sessionStorageData.first_name} ${sessionStorageData.last_name}`;
+	).innerHTML = `<strong>${sessionStorageData.first_name} ${sessionStorageData.last_name}</strong>`;
 
 	// Customer Address
 	document.querySelector(
 		".customer-address"
 	).innerHTML = `${sessionStorageData.address}, ${sessionStorageData.city}, ${sessionStorageData.country}`;
-
-	// Order Amount
-	document.querySelector(
-		".order-amount"
-	).innerHTML = `${sessionStorageData.amount} ${sessionStorageData.currency}`;
 
 	// Order Item
 	document.querySelector(
@@ -180,6 +175,17 @@
 	document.querySelector(
 		".payment-method"
 	).innerHTML = `<strong>${sessionStorageData.paymentMethod}</strong>`;
+
+	// Order Amount (with thousand separator )
+	const amountStr = sessionStorageData.amount;
+	const amountFlt = parseFloat(amountStr);
+	const amountFormatted = amountFlt.toLocaleString("en-US", {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
+	document.querySelector(
+		".order-amount"
+	).innerHTML = `<strong>${amountFormatted}</strong> <small>${sessionStorageData.currency}</small>`;
 
 	// Customer Email
 	const customerEmailElements = document.querySelectorAll(".customerEmail");
@@ -214,8 +220,8 @@
 		};
 
 		const transactionData = {
-			amount: "1222333.99",
-			currency: "GBP",
+			amount: "11888.99",
+			currency: "USD",
 			orderId: "20240203-065947-4627",
 			paymentCardLast4Digits: "1292",
 			paymentId: "320032369125",
