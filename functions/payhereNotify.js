@@ -1,18 +1,40 @@
+/**
+ * Netlify Function: Payhere Notify.
+ * Handles Payhere payment notifications and records successful orders in FaunaDB.
+ * @module payhereNotify
+ */
+
+// Load environment variables from .env file
 require("dotenv").config();
+
+// Crypto module for hashing
 const crypto = require("crypto");
+
+// FaunaDB module
 const faunadb = require("faunadb");
 
+// FaunaDB query functions
 const query = faunadb.query;
+
+// FaunaDB client configuration
 const client = new faunadb.Client({
 	secret: process.env.FAUNA_SECRET_KEY,
-	domain: "db.us.fauna.com",
+	domain: "db.us.fauna.com", // Replace with your FaunaDB domain
 });
 
+/**
+ * Netlify Function handler for processing Payhere payment notifications.
+ * @async
+ * @param {Object} event - The event object representing the HTTP request.
+ * @param {Object} context - The context object providing information about the function's execution environment.
+ * @returns {Object} An object containing the HTTP response status code and body.
+ */
 exports.handler = async (event, context) => {
 	try {
 		// Parse the incoming data
 		const formData = new URLSearchParams(event.body);
 
+		// Extract data from Payhere notification
 		const merchantId = formData.get("merchant_id");
 		const orderId = formData.get("order_id");
 		const payhereAmount = formData.get("payhere_amount");
@@ -86,6 +108,7 @@ exports.handler = async (event, context) => {
 			};
 		}
 	} catch (error) {
+		// Handle errors and return an internal server error response
 		console.error("Error:", error);
 		return {
 			statusCode: 500,
