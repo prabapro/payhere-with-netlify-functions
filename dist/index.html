@@ -42,7 +42,7 @@
 						class="form-select"
 						id="currency"
 						aria-label="Floating label select example">
-						<option value="USD" selected>USD</option>
+						<option value="USD">USD</option>
 						<option value="LKR">LKR</option>
 						<option value="EUR">EUR</option>
 						<option value="GBP">GBP</option>
@@ -61,6 +61,12 @@
 						required />
 					<label for="amount">Amount</label>
 				</div>
+
+				<!-- Hidden Form Fields -->
+				<input type="hidden" id="address" value="" />
+				<input type="hidden" id="email" value="" />
+				<input type="hidden" id="item" value="" />
+				<input type="hidden" id="phone" value="" />
 
 				<button
 					class="w-100 btn btn-lg btn-primary"
@@ -100,6 +106,71 @@
 		</main>
 
 		<script>
+			// Randomuser.me API to get random user data
+			async function fetchData() {
+				try {
+					const response = await fetch("https://randomuser.me/api/");
+					const data = await response.json();
+					const randomUser = { ...data.results[0] };
+					const {
+						name: { first, last },
+						email,
+						phone,
+						location: { street, city, state, country, postcode },
+						id,
+						login,
+					} = randomUser;
+
+					const currencies = ["USD", "LKR", "EUR", "GBP", "AUD"];
+					const randomCurrency =
+						currencies[Math.floor(Math.random() * currencies.length)];
+
+					let minAmount, maxAmount;
+
+					if (randomCurrency === "LKR") {
+						minAmount = 10000;
+						maxAmount = 50000;
+					} else {
+						minAmount = 10;
+						maxAmount = 120;
+					}
+
+					const randomAmount = (
+						Math.random() * (maxAmount - minAmount) +
+						minAmount
+					).toFixed(2);
+
+					const user = {
+						address: `${street.number} ${street.name}, ${city}, ${state}, ${country} ${postcode}`,
+						amount: randomAmount,
+						currency: randomCurrency,
+						email,
+						first,
+						item: `${id.name} ${login.username}`.toUpperCase(),
+						last,
+						phone,
+					};
+
+					console.log(user);
+
+					// Set random values to the form fields
+					// Visible Fields
+					document.querySelector("#firstName").value = user.first;
+					document.querySelector("#lastName").value = user.last;
+					document.querySelector("#currency").value = user.currency;
+					document.querySelector("#amount").value = user.amount;
+					// Hidden Fields
+					document.querySelector("#address").value = user.address;
+					document.querySelector("#email").value = user.email;
+					document.querySelector("#item").value = user.item;
+					document.querySelector("#phone").value = user.phone;
+				} catch (error) {
+					console.error("Error fetching data:", error);
+				}
+			}
+			fetchData();
+
+			// Allow amount field to enter only numeric with 2 decimals
 			document
 				.getElementById("amount")
 				.addEventListener("input", function (event) {
