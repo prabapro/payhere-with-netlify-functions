@@ -92,7 +92,7 @@ async function initiatePayment() {
 				if (faunaResponse.ok) {
 					const faunaData = await faunaResponse.json();
 
-					//TODO: validate the payment and show success or failure page to the customer
+					// Validate the payment and show success or failure page to the customer
 					if (faunaData) {
 						// Retrieving data from Fauna
 						const transactionData = JSON.stringify(faunaData.data);
@@ -103,16 +103,12 @@ async function initiatePayment() {
 						// Redirecting customer to the success page
 						window.location.href = "/success";
 					} else {
-						console.error("Order ID not found in FaunaDB");
-
-						//TODO: Handle the case where the order ID does not exist in FaunaDB
+						console.error("Order ID not found in the database.");
 					}
 				} else {
 					console.error(
-						`Failed to check order ID in FaunaDB. Status: ${faunaResponse.status}`
+						`Status: ${faunaResponse.status} - Failed to retrieve from the database.`
 					);
-
-					//TODO: Handle the case where the FaunaDB check failed
 				}
 			} catch (error) {
 				console.error("Error:", error);
@@ -137,19 +133,22 @@ async function initiatePayment() {
 	}
 }
 
-// Generate 20 character Order ID using the current UTC timestamp + 6 random digits
+// Generate 20 character Order ID (including 2 hyphens) using the current UTC timestamp + 6 random digits
 function generateOrderId() {
 	const pad = (value) => String(value).padStart(2, "0");
 	const now = new Date();
 
-	const timestamp = `${now.getUTCFullYear()}${pad(now.getUTCDate())}${pad(
-		now.getUTCMonth() + 1
-	)}${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(
+	const datePart = `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(
+		now.getUTCDate()
+	)}`;
+	const timePart = `${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(
 		now.getUTCSeconds()
 	)}`;
 
-	const randomNum = Math.floor(Math.random() * 900000) + 100000;
-	return `${timestamp}${randomNum}`;
+	const randomNum = Math.floor(Math.random() * 9000) + 1000;
+
+	const orderId = `${datePart}-${timePart}-${randomNum}`;
+	return orderId;
 }
 
 // Store customer data in session storage excluding certain keys
