@@ -66,8 +66,22 @@ async function initiatePayment() {
 
 		//TODO: replace the hardcoded values...
 
+		// Store the payment object in session storage excluding a couple of keys
+		const excludedProperties = [
+			"sandbox",
+			"notify_url",
+			"cancel_url",
+			"return_url",
+			"merchant_id",
+			"hash",
+		];
+
+		storeFilteredPaymentInSessionStorage(payment, excludedProperties);
+
+		// Start Payhere Payment
 		payhere.startPayment(payment);
 
+		// Payhere completed processing payment
 		payhere.onCompleted = async function onCompleted(orderId) {
 			try {
 				// Check if the order ID exists in FaunaDB
@@ -123,6 +137,7 @@ async function initiatePayment() {
 	}
 }
 
+// Generate 20 character Order ID using the current UTC timestamp + 6 random digits
 function generateOrderId() {
 	const pad = (value) => String(value).padStart(2, "0");
 	const now = new Date();
@@ -135,4 +150,20 @@ function generateOrderId() {
 
 	const randomNum = Math.floor(Math.random() * 900000) + 100000;
 	return `${timestamp}${randomNum}`;
+}
+
+// Store customer data in session storage excluding certain keys
+function storeFilteredPaymentInSessionStorage(inputObject, excludedProperties) {
+	// Create a new object by excluding specified properties
+	const filteredObject = Object.fromEntries(
+		Object.entries(inputObject).filter(
+			([key]) => !excludedProperties.includes(key)
+		)
+	);
+
+	// Convert the filtered object to a JSON string
+	const filteredObjectString = JSON.stringify(filteredObject);
+
+	// Store the JSON string in session storage
+	sessionStorage.setItem("customerOrderData", filteredObjectString);
 }
