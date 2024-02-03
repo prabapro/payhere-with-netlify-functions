@@ -21,17 +21,14 @@
 						<img src="src/check.png" alt="success icon" width="72px" />
 						<h4 class="pt-4">
 							Thank you,
-							<span id="customerFirstName">Jane</span>
-							.
+							<span class="customer-first-name"></span>
 						</h4>
 
 						<p class="pt-2">
 							Order #
 							<span
-								id="orderNumber"
-								class="badge rounded-pill font-monospace bg-light text-dark fs-6">
-								12345678901234567890
-							</span>
+								class="order-number"
+								class="badge rounded-pill font-monospace bg-light text-dark fs-6"></span>
 						</p>
 					</div>
 				</div>
@@ -39,26 +36,28 @@
 				<div class="card mt-4 text-start">
 					<ul class="list-group list-group-flush">
 						<li class="list-group-item">
-							<p class="text-muted pt-2 fw-lighter">Customer Information</p>
-							<p>
-								<span id="customerName"><strong>Jane Doe</strong></span>
+							<p class="text-muted pt-2 fw-lighter">Your details</p>
+							<h3>
+								<span class="customer-name"></span>
+							</h3>
+							<p class="mb-1">
+								<span class="customer-address"></span>
 							</p>
 							<p>
-								<span id="customerAddress">
-									123, Main Street, Colombo, Sri Lanka
-								</span>
+								<span class="customerEmail"></span>
 							</p>
 						</li>
 						<li class="list-group-item">
-							<p class="text-muted pt-2 fw-lighter">Order Information</p>
-							<p><span id="orderItem">MacBook Pro</span></p>
-							<p><span id="orderAmount">LKR 1500.00</span></p>
+							<p class="text-muted pt-2 fw-lighter">You Paid</p>
+							<h3><span class="order-amount"></span></h3>
+							<p class="text-muted pt-2 fw-lighter">For</p>
+							<h3><span class="order-item"></span></h3>
 						</li>
 						<li class="list-group-item">
-							<p class="text-muted pt-2 fw-lighter">Payment Information</p>
+							<p class="text-muted pt-2 fw-lighter">Paid via</p>
 							<p>
-								<span id="paymentMethod">Visa</span>
-								<span id="paymentCard">************4564</span>
+								<span class="payment-method"></span>
+								<span class="payment-card"></span>
 							</p>
 						</li>
 					</ul>
@@ -66,7 +65,7 @@
 
 				<p class="pt-4">
 					We'll email the receipt to
-					<span id="customerEmail">test@test.com</span>
+					<span class="customerEmail"></span>
 					shortly.
 				</p>
 			</div>
@@ -108,3 +107,128 @@
 		</main>
 	</body>
 </html>
+
+<script>
+	// UNCOMMENT BELOW TO SET DATA INTO SESSION STORAGE FOR DEBUGGING
+	// setDummyDataIntoSessionStorage();
+
+	// Retrieve customer data from session storage
+	const ssCustomerOrderData = JSON.parse(
+		sessionStorage.getItem("customerOrderData")
+	);
+
+	// Retrieve transaction data from session storage
+	const ssTransactionData = JSON.parse(
+		sessionStorage.getItem("transactionData")
+	);
+
+	// Combine both objects
+	const sessionStorageData = { ...ssCustomerOrderData, ...ssTransactionData };
+
+	// Destructure the combined object with default values
+	const {
+		address = "",
+		amount = "",
+		city = "",
+		country = "",
+		currency = "",
+		delivery_address = "",
+		delivery_city = "",
+		delivery_country = "",
+		email = "",
+		first_name = "",
+		items = "",
+		last_name = "",
+		order_id = "",
+		phone = "",
+		paymentCardLast4Digits = "",
+		paymentId = "",
+		paymentMethod = "",
+		statusMessage = "",
+	} = sessionStorageData;
+
+	// First Name
+	document.querySelector(
+		".customer-first-name"
+	).innerHTML = `${sessionStorageData.first_name}.`;
+
+	// Order ID
+	document.querySelector(".order-number").innerHTML =
+		sessionStorageData.order_id;
+
+	// Customer Full Name
+	document.querySelector(
+		".customer-name"
+	).innerHTML = `${sessionStorageData.first_name} ${sessionStorageData.last_name}`;
+
+	// Customer Address
+	document.querySelector(
+		".customer-address"
+	).innerHTML = `${sessionStorageData.address}, ${sessionStorageData.city}, ${sessionStorageData.country}`;
+
+	// Order Amount
+	document.querySelector(
+		".order-amount"
+	).innerHTML = `${sessionStorageData.amount} ${sessionStorageData.currency}`;
+
+	// Order Item
+	document.querySelector(
+		".order-item"
+	).innerHTML = `${sessionStorageData.items}`;
+
+	// Payment Method
+	document.querySelector(
+		".payment-method"
+	).innerHTML = `<strong>${sessionStorageData.paymentMethod}</strong>`;
+
+	// Customer Email
+	const customerEmailElements = document.querySelectorAll(".customerEmail");
+	customerEmailElements.forEach((element) => {
+		element.innerHTML = sessionStorageData.email;
+	});
+
+	// Card Number
+	const cardNum = sessionStorageData.paymentCardLast4Digits;
+	const paymentCardElement = document.querySelector(".payment-card");
+	if (cardNum !== "") {
+		paymentCardElement.innerHTML = `ends with ${cardNum}`;
+	} else {
+		paymentCardElement.innerHTML = "";
+	}
+
+	// Function to inject data into session storage for debugging
+	function setDummyDataIntoSessionStorage() {
+		const customerOrderData = {
+			address: "123, Main Street",
+			amount: "99.99",
+			city: "Colombo",
+			country: "Sri Lanka",
+			currency: "USD",
+			delivery_address: "123, Main Steet",
+			delivery_city: "Colombo",
+			delivery_country: "Sri Lanka",
+			email: "john@doe.com",
+			first_name: "John",
+			items: "MacBook Pro",
+			last_name: "Doe",
+			order_id: "20240203-072150-1735",
+			phone: "0777111222",
+		};
+
+		const transactionData = {
+			amount: "72.99",
+			currency: "GBP",
+			orderId: "20240203-065947-4627",
+			paymentCardLast4Digits: "1292",
+			paymentId: "320032369125",
+			paymentMethod: "VISA",
+			statusMessage: "Successfully received the VISA payment",
+		};
+
+		sessionStorage.setItem(
+			"customerOrderData",
+			JSON.stringify(customerOrderData)
+		);
+		sessionStorage.setItem("transactionData", JSON.stringify(transactionData));
+	}
+</script>
