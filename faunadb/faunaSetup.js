@@ -11,13 +11,13 @@ const client = new faunadb.Client({
 
 // Create a collection for orders
 client
-	.query(q.CreateCollection({ name: "payhere-deme-orders" }))
+	.query(q.CreateCollection({ name: "payhere-demo-orders" }))
 	.then(() => {
 		// Define an index for order IDs
 		return client.query(
 			q.CreateIndex({
 				name: "orders_by_orderId",
-				source: q.Collection("payhere-deme-orders"),
+				source: q.Collection("payhere-demo-orders"),
 				terms: [{ field: ["data", "orderId"] }],
 			})
 		);

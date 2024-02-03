@@ -44,7 +44,7 @@ exports.handler = async (event, context) => {
 		if (md5sig === expectedMd5sig && statusCode === "2") {
 			// Store successful order ID in FaunaDB
 			const faunadbResponse = await client.query(
-				query.Create(query.Collection("payhere-deme-orders"), {
+				query.Create(query.Collection("payhere-demo-orders"), {
 					data: {
 						orderId: orderId,
 						amount: payhereAmount,
