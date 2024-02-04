@@ -10,10 +10,10 @@
 	<body class="text-center">
 		<main class="form-signin">
 			<img class="mb-4" src="src/payhere-logo.png" alt="Payhere Logo" />
-			<h5 class="mb-4">
+			<p class="mb-4">
 				A Jamstack demo app using payhere.lk payment gateway with Netlify
 				Functions & Fauna DB
-			</h5>
+			</p>
 
 			<div class="container mt-5">
 				<div class="row">
@@ -78,7 +78,7 @@
 				Back to Home Page
 			</a>
 
-			<div class="mt-5 mb-3 text-muted">
+			<div class="mt-5 mb-3 text-muted footer">
 				<p>
 					<strong>⚠️</strong>
 					This is solely a demonstration app using
@@ -171,11 +171,6 @@
 		".order-item"
 	).innerHTML = `${sessionStorageData.items}`;
 
-	// Payment Method
-	document.querySelector(
-		".payment-method"
-	).innerHTML = `<strong>${sessionStorageData.payment_method}</strong>`;
-
 	// Order Amount (with thousand separator )
 	const amountStr = sessionStorageData.amount;
 	const amountFlt = parseFloat(amountStr);
@@ -192,6 +187,36 @@
 	customerEmailElements.forEach((element) => {
 		element.innerHTML = sessionStorageData.email;
 	});
+
+	// Function to get credit card logo HTML
+	const getCreditCardLogoHTML = (cardType) => {
+		switch (cardType) {
+			case "VISA":
+				return `<img src="src/visa.png" alt="VISA">`;
+			case "MASTER":
+				return `<img src="src/master.png" alt="MasterCard">`;
+			case "AMEX":
+				return `<img src="src/amex.png" alt="American Express">`;
+			default:
+				return "";
+		}
+	};
+
+	// Get payment method from sessionStorage
+	const paymentMethod = sessionStorageData.payment_method;
+
+	// Display payment method
+	const paymentMethodElement = document.querySelector(".payment-method");
+
+	// Display credit card logo (if applicable)
+	if (["VISA", "MASTER", "AMEX"].includes(paymentMethod)) {
+		const creditCardLogoHTML = getCreditCardLogoHTML(paymentMethod);
+		// Display only the logo HTML without the payment method string
+		paymentMethodElement.innerHTML = creditCardLogoHTML;
+	} else {
+		// Display the payment method string if it's not VISA, MASTER, or AMEX
+		paymentMethodElement.innerHTML = `<strong>${paymentMethod}</strong>`;
+	}
 
 	// Card Number
 	const cardNum = sessionStorageData.payment_card;
@@ -213,7 +238,7 @@
 			delivery_country: "Australia",
 			email: "virgil.crawford@example.com",
 			first_name: "Virgil",
-			items: "TFN BIGDOG141",
+			items: "BIGDOG141",
 			last_name: "Crawford",
 			order_id: "20240204-072618-7172",
 			phone: "01-6828-9589",

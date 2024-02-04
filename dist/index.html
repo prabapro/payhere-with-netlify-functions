@@ -10,10 +10,10 @@
 	<body class="text-center">
 		<main class="form-signin">
 			<img class="mb-4" src="src/payhere-logo.png" alt="Payhere Logo" />
-			<h5 class="mb-4">
+			<p class="mb-4">
 				A Jamstack demo app using payhere.lk payment gateway with Netlify
 				Functions & Fauna DB
-			</h5>
+			</p>
 			<form>
 				<div class="form-floating mb-2">
 					<input
@@ -79,7 +79,7 @@
 				</button>
 			</form>
 
-			<div class="mt-5 mb-3 text-muted">
+			<div class="mt-5 mb-3 text-muted footer">
 				<p>
 					<strong>⚠️</strong>
 					This is solely a demonstration app using
@@ -108,7 +108,7 @@
 		</main>
 
 		<script>
-			// Randomuser.me API to get random user data
+			// RandomUser.me API to get random user data
 			async function fetchData() {
 				try {
 					const response = await fetch(
@@ -121,7 +121,6 @@
 						email,
 						phone,
 						location: { street, city, state, country, postcode },
-						id,
 						login,
 					} = randomUser;
 
@@ -152,12 +151,12 @@
 						currency: randomCurrency,
 						email,
 						first,
-						item: `${id.name} ${login.username}`.toUpperCase(),
+						item: `${login.username}`.toUpperCase(),
 						last,
 						phone,
 					};
 
-					console.table(user);
+					console.log(user);
 
 					// Set random values to the form fields
 					// Visible Fields

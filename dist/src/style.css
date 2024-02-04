@@ -28,3 +28,12 @@ body {
 .form-signin .form-floating:focus-within {
 	z-index: 2;
 }
+
+.payment-method img {
+	height: 60px;
+	padding-right: 10px;
+}
+
+.footer {
+	font-size: 0.8em;
+}
