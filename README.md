@@ -1,5 +1,7 @@
 # Payhere Payment Gateway with Netlify Functions & Fauna DB
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2980db89-af0d-47f1-84f0-ef19414bead6/deploy-status)](https://app.netlify.com/sites/praba-payhere-with-netlify-functions/deploys)
+
 A Node.js app to integrate Payhere.lk payment gateway using Netlify Functions & Fauna DB.
 
 - [Payhere JavaScript SDK](https://support.payhere.lk/api-&-mobile-sdk/javascript-sdk)
@@ -40,8 +42,11 @@ To ensure the seamless functioning of the entire funnel, follow these steps:
 
 **1. Why Netlify Functions?**
 
-Netlify Functions are utilized for two key reasons in this setup. Firstly, Payhere necessitates the hashing of the merchant secret alongside other parameters. Therefore, Netlify Functions serve as the backend for performing the hashing process and handling the receipt of payment notifications from Payhere.
+- 🔐 **Security**: The Payhere Merchant Secret is required for generating the hash. Performing this operation on the front-end poses security risks. Netlify Functions act as a secure backend for handling the hash generation process.
+- 📡 **Server Callback**: Netlify Functions listen to payment notifications from PayHere, facilitating the passing of relevant information to the front-end.
 
 **2. Why Fauna DB?**
 
-Payhere mandates the verification of payment notifications before any actions are taken on the payment response. Fauna DB serves as a temporary storage solution for incoming order IDs while the server conducts checksum validation.
+- 🏦 **Payment Status Handling**: Since PayHere doesn't provide payment status parameters to the `return_url` during customer redirection, updating the database upon fetching payment status via your `notify_url` script is crucial.
+- 🏢 **Modern Database Solution**: Fauna DB is a cloud-native database with a flexible document data model. It seamlessly integrates semi-structured data with powerful relational features, including foreign keys, views, and joins.
+- 🔁 **Efficient Data Retrieval:** Integration with Fauna DB allows you to efficiently retrieve payment status & display to customers on the `return_url` page.
