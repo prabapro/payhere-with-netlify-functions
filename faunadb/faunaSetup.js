@@ -16,9 +16,9 @@ client
 		// Define an index for order IDs
 		return client.query(
 			q.CreateIndex({
-				name: "orders_by_orderId",
+				name: "orders_by_order_id",
 				source: q.Collection("payhere-demo-orders"),
-				terms: [{ field: ["data", "orderId"] }],
+				terms: [{ field: ["data", "order_id"] }],
 			})
 		);
 	})

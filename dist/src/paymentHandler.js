@@ -29,12 +29,12 @@ async function initiatePayment() {
 	 * @type {Object}
 	 * @property {string} currency - The currency of the order.
 	 * @property {string} amount - The formatted amount of the order.
-	 * @property {string} orderId - The generated order ID.
+	 * @property {string} order_id - The generated order ID.
 	 */
 	const orderDetails = {
 		currency: currencyField,
 		amount: formattedAmountString,
-		orderId: orderId,
+		order_id: orderId,
 	};
 
 	/**
@@ -84,7 +84,7 @@ async function initiatePayment() {
 
 			//* Payment Params Received from payhereCheckout Netlify Function
 			hash: data.hash,
-			merchant_id: data.merchantId,
+			merchant_id: data.merchant_id,
 
 			//* Other Parameters
 			address: addressField,

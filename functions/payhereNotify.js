@@ -70,13 +70,13 @@ exports.handler = async (event, context) => {
 			const faunadbResponse = await client.query(
 				query.Create(query.Collection("payhere-demo-orders"), {
 					data: {
-						orderId: orderId,
+						order_id: orderId,
 						amount: payhereAmount,
 						currency: payhereCurrency,
-						paymentCardLast4Digits: paymentCardLast4Digits,
-						paymentId: paymentId,
-						paymentMethod: paymentMethod,
-						statusMessage: statusMessage,
+						payment_card: paymentCardLast4Digits,
+						payment_id: paymentId,
+						payment_method: paymentMethod,
+						status_message: statusMessage,
 					},
 				})
 			);
@@ -90,7 +90,7 @@ exports.handler = async (event, context) => {
 					body: JSON.stringify({
 						message:
 							"Payment confirmation received successfully & recorded in Fauna DB.",
-						orderId: orderId,
+						order_id: orderId,
 					}),
 				};
 			} else {

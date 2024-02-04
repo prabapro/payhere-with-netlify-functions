@@ -33,7 +33,7 @@ exports.handler = async (event, context) => {
 
 		// Check if the order ID exists in FaunaDB
 		const faunaResponse = await client.query(
-			query.Get(query.Match(query.Index("orders_by_orderId"), orderId))
+			query.Get(query.Match(query.Index("orders_by_order_id"), orderId))
 		);
 
 		// Return successful response with FaunaDB data

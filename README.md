@@ -23,7 +23,7 @@ To ensure the seamless functioning of the entire funnel, follow these steps:
 - Create a Database in US Region Group.
 - Go to the Database > Security > Create a secret key with the server role.
 - Add the key to the `.env` file as `FAUNA_SECRET_KEY`
-- Run below to create the collection `payhere-demo-orders` & index `orders_by_orderId`
+- Run below to create the collection `payhere-demo-orders` & index `orders_by_order_id`
   ```shell
   node faunadb/faunaSetup.js
   ```

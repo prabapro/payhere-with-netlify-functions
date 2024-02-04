@@ -141,10 +141,10 @@
 		last_name = "",
 		order_id = "",
 		phone = "",
-		paymentCardLast4Digits = "",
-		paymentId = "",
-		paymentMethod = "",
-		statusMessage = "",
+		payment_card = "",
+		payment_id = "",
+		payment_method = "",
+		status_message = "",
 	} = sessionStorageData;
 
 	// First Name
@@ -174,7 +174,7 @@
 	// Payment Method
 	document.querySelector(
 		".payment-method"
-	).innerHTML = `<strong>${sessionStorageData.paymentMethod}</strong>`;
+	).innerHTML = `<strong>${sessionStorageData.payment_method}</strong>`;
 
 	// Order Amount (with thousand separator )
 	const amountStr = sessionStorageData.amount;
@@ -194,7 +194,7 @@
 	});
 
 	// Card Number
-	const cardNum = sessionStorageData.paymentCardLast4Digits;
+	const cardNum = sessionStorageData.payment_card;
 	const paymentCardElement = document.querySelector(".payment-card");
 	if (cardNum !== "") {
 		paymentCardElement.innerHTML = `ends with ${cardNum}`;
@@ -205,28 +205,28 @@
 	// Function to inject data into session storage for debugging
 	function setDummyDataIntoSessionStorage() {
 		const customerOrderData = {
-			address: "123, Main Street",
-			city: "Colombo",
-			country: "Sri Lanka",
-			delivery_address: "123, Main Steet",
-			delivery_city: "Colombo",
-			delivery_country: "Sri Lanka",
-			email: "john@doe.com",
-			first_name: "John",
-			items: "MacBook Pro",
-			last_name: "Doe",
-			order_id: "20240203-072150-1735",
-			phone: "0777111222",
+			address: "1141 Shady Ln Dr",
+			city: "Bendigo",
+			country: "Australia",
+			delivery_address: "1141 Shady Ln Dr",
+			delivery_city: "Bendigo",
+			delivery_country: "Australia",
+			email: "virgil.crawford@example.com",
+			first_name: "Virgil",
+			items: "TFN BIGDOG141",
+			last_name: "Crawford",
+			order_id: "20240204-072618-7172",
+			phone: "01-6828-9589",
 		};
 
 		const transactionData = {
-			amount: "11888.99",
-			currency: "USD",
-			orderId: "20240203-065947-4627",
-			paymentCardLast4Digits: "1292",
-			paymentId: "320032369125",
-			paymentMethod: "VISA",
-			statusMessage: "Successfully received the VISA payment",
+			order_id: "20240204-072618-7172",
+			amount: "15352.63",
+			currency: "EUR",
+			payment_card: "1191",
+			payment_id: "320032369262",
+			payment_method: "MASTER",
+			status_message: "Successfully received the MASTER payment",
 		};
 
 		sessionStorage.setItem(

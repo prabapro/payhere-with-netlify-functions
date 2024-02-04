@@ -22,7 +22,7 @@ exports.handler = async (event, context) => {
 		// Extract parameters from the query parameters
 		const amount = event.queryStringParameters.amount;
 		const currency = event.queryStringParameters.currency;
-		const orderId = event.queryStringParameters.orderId;
+		const orderId = event.queryStringParameters.order_id;
 
 		// Retrieve merchant ID and secret from environment variables
 		const merchantId = process.env.PAYHERE_MERCHANT_ID;
@@ -52,15 +52,15 @@ exports.handler = async (event, context) => {
 				amount: amount,
 				currency: currency,
 				hash: hash,
-				merchantId: merchantId,
-				orderId: orderId,
+				merchant_id: merchantId,
+				order_id: orderId,
 			}),
 		};
 	} catch (error) {
 		// Handle errors and return an internal server error response
 		return {
 			statusCode: 500,
-			body: JSON.stringify({ error: "Internal Server Error" }),
+			body: JSON.stringify({ error: error.message || "Internal Server Error" }),
 		};
 	}
 };

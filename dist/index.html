@@ -146,9 +146,9 @@
 
 					const user = {
 						address: `${street.number} ${street.name}`,
+						amount: randomAmount,
 						city,
 						country,
-						amount: randomAmount,
 						currency: randomCurrency,
 						email,
 						first,
@@ -157,7 +157,7 @@
 						phone,
 					};
 
-					// console.log(user);
+					console.table(user);
 
 					// Set random values to the form fields
 					// Visible Fields
