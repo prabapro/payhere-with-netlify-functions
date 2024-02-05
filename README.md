@@ -32,8 +32,11 @@ To ensure the seamless functioning of the entire funnel, follow these steps:
 
 ### Environment Variables
 
-- Rename the `.env.example` file to `.env` and add your env variables.
-- If new keys are added to the `.env` file, run below command to update the template with new keys.
+- Generate `.env` file from `.env.example` and add your env variables.
+  ```shell
+  cp .env.example .env
+  ```
+- If new keys are added to the `.env` file, run below command to update the example file with new keys.
   ```shell
   sed 's/=.*/=/' .env > .env.example
   ```
